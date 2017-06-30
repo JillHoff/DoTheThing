@@ -16,10 +16,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".PrefsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
+            </intent-filter>
+        </activity>
 
-        <receiver android:name=".AlarmReceiver"/>
-        <service android:name=".AlarmService"
-            android:enabled="true"/>
+        <receiver android:name=".AlarmReceiver" />
+
+        <service
+            android:name=".AlarmService"
+            android:enabled="true" />
+
     </application>
 
 </manifest>

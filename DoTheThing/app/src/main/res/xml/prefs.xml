@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <PreferenceCategory
+        android:summary="Place to set the ringtone"
+        android:title="Settings">
+
+        <RingtonePreference
+            android:name="Alarm"
+            android:defaultValue="defaultRingtone"
+            android:key="alarm"
+            android:ringtoneType="alarm"
+            android:showDefault="true"
+            android:summary="Select an alarm"
+            android:title="Alarm" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

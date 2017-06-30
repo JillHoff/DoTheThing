@@ -6,19 +6,19 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.app.BundleCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 public class AlarmService extends Service {
 
     Context context;
-    MediaPlayer pennyPlayer;
     Boolean serviceIsStarted = false;
-
+    Ringtone r = null;
 
     @Nullable
     @Override
@@ -30,24 +30,35 @@ public class AlarmService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         this.context = this;
 
+        serviceIsStarted = intent.getBooleanExtra("AlarmRunning", false);
+
+        if (r == null)
+            {
+                String alarmUri = intent.getStringExtra("ringtone");
+                r = RingtoneManager.getRingtone(this, Uri.parse(alarmUri));
+            }
+
         Log.d("Whatever", "inside service");
 
         NotificationManager mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        if (pennyPlayer == null)
-            pennyPlayer = MediaPlayer.create(this, R.raw.penny);
-
-        serviceIsStarted = intent.getBooleanExtra("AlarmRunning", false);
-
         if (serviceIsStarted) {
             serviceIsStarted = false;
-            pennyPlayer.stop();
             stopSelf();
             mNM.cancelAll();
+            r.stop();
+            r = null;
 
         } else {
             serviceIsStarted = true;
-            pennyPlayer.start();
+
+            try
+                {
+                    r.play();
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
 
             Intent goBackToMainActivityIntent = new Intent(this.getApplicationContext(), MainActivity.class);
             PendingIntent pendingGoBackToMainActivityIntent = PendingIntent.getActivity(this, 0, goBackToMainActivityIntent, 0);
